@@ -1,13 +1,350 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ============================================
+   WHATSAPP DARK THEME — DESIGN SYSTEM
+   ============================================ */
+
+:root {
+  /* WhatsApp Core Colors */
+  --primary: #25D366;
+  --primary-dark: #128C7E;
+  --primary-deeper: #075E54;
+  --primary-light: #34eb7a;
+
+  /* Backgrounds */
+  --bg-app: #0B141A;
+  --bg-sidebar: #111B21;
+  --bg-chat: #0B141A;
+  --bg-header: #1F2C34;
+  --bg-input: #2A3942;
+  --bg-hover: #202C33;
+  --bg-active: #2A3942;
+  --bg-panel: #111B21;
+  --bg-dropdown: #233138;
+
+  /* Message Bubbles */
+  --bg-message-sent: #005C4B;
+  --bg-message-received: #202C33;
+  --bg-message-sent-hover: #025144;
+  --bg-message-received-hover: #1D2A31;
+
+  /* Text */
+  --text-primary: #E9EDEF;
+  --text-secondary: #8696A0;
+  --text-muted: #667781;
+  --text-green: #25D366;
+  --text-link: #53BDEB;
+
+  /* Borders */
+  --border-color: #2A3942;
+  --border-light: #1F2C34;
+  --border-header: #222D34;
+
+  /* Status */
+  --online-green: #25D366;
+  --unread-green: #25D366;
+  --error-red: #F15C6D;
+  --warning-yellow: #FFC107;
+
+  /* Tick Colors */
+  --tick-default: #667781;
+  --tick-blue: #53BDEB;
+
+  /* Shadows & Glows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(37, 211, 102, 0.15);
+  --shadow-glow-strong: 0 0 40px rgba(37, 211, 102, 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+}
+
+/* ============================================
+   GLOBAL RESET & BASE
+   ============================================ */
+
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* ============================================
+   SCROLLBAR — WhatsApp Style
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(37, 211, 102, 0.25);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 211, 102, 0.45);
+}
+
+/* ============================================
+   WHATSAPP CHAT BACKGROUND PATTERN
+   ============================================ */
+
+.chat-bg-pattern {
+  position: relative;
+  background-color: var(--bg-chat);
+}
+
+.chat-bg-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5C16.2 5 5 16.2 5 30s11.2 25 25 25 25-11.2 25-25S43.8 5 30 5zm0 45c-11 0-20-9-20-20s9-20 20-20 20 9 20 20-9 20-20 20z' fill='%2325D366' fill-opacity='0.3'/%3E%3Cpath d='M25 20l15 10-15 10z' fill='%2325D366' fill-opacity='0.15'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chat-bg-pattern>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* Subtle doodle pattern */
+.whatsapp-doodle-bg {
+  background-color: var(--bg-chat);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(37, 211, 102, 0.015) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(18, 140, 126, 0.015) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2a3 3 0 100 6 3 3 0 000-6zm-8 8a2 2 0 100 4 2 2 0 000-4zm16 0a2 2 0 100 4 2 2 0 000-4zM8 22a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm24 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-12 8a2 2 0 100 4 2 2 0 000-4z' fill='%2325D366' fill-opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(37, 211, 102, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.4);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes onlinePulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 4px rgba(37, 211, 102, 0);
+  }
+}
+
+@keyframes messagePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes typing-dot {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+@keyframes heroFloat {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+
+  75% {
+    transform: translateY(5px) rotate(-1deg);
+  }
+}
+
+@keyframes bubbleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(20px);
+  }
+
+  60% {
+    transform: scale(1.05) translateY(-3px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tickAnimate {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, monospace;
 }

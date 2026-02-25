@@ -1,12 +1,12 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Box, Stack, Text, Flex } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { getSender } from "../config/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
-import { Button } from "@chakra-ui/react";
+import { Button, Avatar } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 
 const MyChats = ({ fetchAgain }) => {
@@ -17,7 +17,6 @@ const MyChats = ({ fetchAgain }) => {
   const toast = useToast();
 
   const fetchChats = async () => {
-    // console.log(user._id);
     try {
       const config = {
         headers: {
@@ -29,8 +28,8 @@ const MyChats = ({ fetchAgain }) => {
       setChats(data);
     } catch (error) {
       toast({
-        title: "Error Occured!",
-        description: "Failed to Load the chats",
+        title: "Error Occurred!",
+        description: "Failed to load the chats",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -45,74 +44,139 @@ const MyChats = ({ fetchAgain }) => {
     // eslint-disable-next-line
   }, [fetchAgain]);
 
+  const formatTime = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    const hours = d.getHours();
+    const minutes = d.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const h = hours % 12 || 12;
+    return `${h}:${minutes} ${ampm}`;
+  };
+
   return (
     <Box
-      d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+      display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
-      alignItems="center"
-      p={3}
-      bg="white"
-      w={{ base: "100%", md: "31%" }}
-      borderRadius="lg"
-      borderWidth="1px"
+      w={{ base: "100%", md: "35%" }}
+      bg="#111B21"
+      borderRight="1px solid #2A3942"
+      h="100%"
     >
+      {/* Sidebar Header */}
       <Box
-        pb={3}
-        px={3}
-        fontSize={{ base: "28px", md: "30px" }}
-        fontFamily="Work sans"
-        d="flex"
-        w="100%"
+        px={4}
+        py={3}
+        bg="#1F2C34"
+        display="flex"
         justifyContent="space-between"
         alignItems="center"
+        borderBottom="1px solid #2A3942"
       >
-        My Chats
+        <Text
+          fontSize="lg"
+          fontWeight="600"
+          color="#E9EDEF"
+        >
+          Chats
+        </Text>
         <GroupChatModal>
           <Button
-            d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-            rightIcon={<AddIcon />}
+            display="flex"
+            fontSize="sm"
+            rightIcon={<AddIcon fontSize="10px" />}
+            variant="ghost"
+            color="#25D366"
+            _hover={{
+              bg: "rgba(37, 211, 102, 0.1)",
+            }}
+            borderRadius="8px"
+            size="sm"
           >
-            New Group Chat
+            New Group
           </Button>
         </GroupChatModal>
       </Box>
+
+      {/* Chat List */}
       <Box
-        d="flex"
+        display="flex"
         flexDir="column"
-        p={3}
-        bg="#F8F8F8"
         w="100%"
         h="100%"
-        borderRadius="lg"
-        overflowY="hidden"
+        overflowY="auto"
       >
         {chats ? (
-          <Stack overflowY="scroll">
+          <Stack spacing={0}>
             {chats.map((chat) => (
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                color={selectedChat === chat ? "white" : "black"}
+                bg={
+                  selectedChat === chat
+                    ? "#2A3942"
+                    : "transparent"
+                }
                 px={3}
-                py={2}
-                borderRadius="lg"
+                py={3}
                 key={chat._id}
+                borderBottom="1px solid rgba(42, 57, 66, 0.5)"
+                transition="background 0.15s ease"
+                _hover={{
+                  bg:
+                    selectedChat === chat
+                      ? "#2A3942"
+                      : "#202C33",
+                }}
+                display="flex"
+                alignItems="center"
+                gap={3}
               >
-                <Text>
-                  {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
-                    : chat.chatName}
-                </Text>
-                {chat.latestMessage && (
-                  <Text fontSize="xs">
-                    <b>{chat.latestMessage.sender.name} : </b>
-                    {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
-                      : chat.latestMessage.content}
-                  </Text>
-                )}
+                {/* Avatar */}
+                <Box position="relative">
+                  <Avatar
+                    size="md"
+                    name={!chat.isGroupChat
+                      ? getSender(loggedUser, chat.users)
+                      : chat.chatName}
+                    bg="#25D366"
+                    color="white"
+                    fontSize="md"
+                  />
+                </Box>
+
+                {/* Chat Info */}
+                <Box flex={1} overflow="hidden">
+                  <Flex justifyContent="space-between" alignItems="center" mb="2px">
+                    <Text
+                      fontWeight="500"
+                      fontSize="md"
+                      color="#E9EDEF"
+                      noOfLines={1}
+                    >
+                      {!chat.isGroupChat
+                        ? getSender(loggedUser, chat.users)
+                        : chat.chatName}
+                    </Text>
+                    {chat.latestMessage && (
+                      <Text fontSize="xs" color="#667781" flexShrink={0} ml={2}>
+                        {formatTime(chat.latestMessage.createdAt || chat.updatedAt)}
+                      </Text>
+                    )}
+                  </Flex>
+                  {chat.latestMessage && (
+                    <Text fontSize="sm" color="#8696A0" noOfLines={1}>
+                      {chat.isGroupChat && (
+                        <Text as="span" color="#25D366" fontWeight="500">
+                          {chat.latestMessage.sender.name}:{" "}
+                        </Text>
+                      )}
+                      {chat.latestMessage.content.length > 40
+                        ? chat.latestMessage.content.substring(0, 41) + "..."
+                        : chat.latestMessage.content}
+                    </Text>
+                  )}
+                </Box>
               </Box>
             ))}
           </Stack>

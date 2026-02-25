@@ -1,6 +1,600 @@
+/* ============================================
+   MESSAGE LIST — WhatsApp Style
+   ============================================ */
+
 .messages {
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
-  scrollbar-width: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(37, 211, 102, 0.2) transparent;
+  padding: 8px 16px;
+}
+
+/* ============================================
+   TYPING INDICATOR — WhatsApp Dots
+   ============================================ */
+
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 16px;
+  background: var(--bg-message-received);
+  border-radius: 8px 8px 8px 0;
+  margin-bottom: 8px;
+  animation: messagePop 0.3s ease;
+}
+
+.typing-indicator .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: typing-dot 1.4s infinite;
+}
+
+.typing-indicator .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ============================================
+   MESSAGE BUBBLES — WhatsApp Style
+   ============================================ */
+
+.message-sent {
+  background: var(--bg-message-sent) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px 8px 0 8px !important;
+  padding: 6px 10px 8px !important;
+  max-width: 65% !important;
+  margin-left: auto !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.13);
+  animation: messagePop 0.2s ease;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.message-received {
+  background: var(--bg-message-received) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px 8px 8px 0 !important;
+  padding: 6px 10px 8px !important;
+  max-width: 65% !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.13);
+  animation: messagePop 0.2s ease;
+  word-wrap: break-word;
+  position: relative;
+}
+
+/* WhatsApp-style bubble tails */
+.message-sent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 8px;
+  height: 13px;
+  background: var(--bg-message-sent);
+  clip-path: polygon(0 0, 0 100%, 100% 0);
+}
+
+.message-received::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 8px;
+  height: 13px;
+  background: var(--bg-message-received);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+/* ============================================
+   MESSAGE TIMESTAMP — Inside Bubble
+   ============================================ */
+
+.message-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  float: right;
+  margin-top: 4px;
+  margin-left: 8px;
+  line-height: 1;
+}
+
+/* ============================================
+   TICK ICONS — WhatsApp Status
+   ============================================ */
+
+.tick-icon {
+  font-size: 14px;
+  animation: tickAnimate 0.3s ease;
+}
+
+.tick-sent {
+  color: var(--tick-default);
+}
+
+.tick-delivered {
+  color: var(--tick-default);
+}
+
+.tick-seen {
+  color: var(--tick-blue);
+}
+
+/* ============================================
+   NOTIFICATION BADGE — WhatsApp Green
+   ============================================ */
+
+.notification-pulse {
+  position: relative;
+}
+
+.notification-pulse::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: onlinePulse 2s infinite;
+}
+
+.unread-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   ONLINE STATUS DOT
+   ============================================ */
+
+.online-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--online-green);
+  border-radius: 50%;
+  border: 2px solid var(--bg-sidebar);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  animation: onlinePulse 2s infinite;
+}
+
+.online-dot-static {
+  width: 8px;
+  height: 8px;
+  background: var(--online-green);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* ============================================
+   DATE SEPARATOR — WhatsApp Pill
+   ============================================ */
+
+.date-separator {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.date-separator span {
+  background: #1F2C34;
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   CONVERSATION LIST ITEM
+   ============================================ */
+
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  border-bottom: 1px solid rgba(42, 57, 66, 0.5);
+}
+
+.chat-list-item:hover {
+  background: var(--bg-hover);
+}
+
+.chat-list-item.active {
+  background: var(--bg-active);
+}
+
+/* ============================================
+   INPUT BAR — WhatsApp Bottom Bar
+   ============================================ */
+
+.input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-header);
+}
+
+.input-bar .message-input {
+  flex: 1;
+  background: var(--bg-input);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: background var(--transition-fast);
+}
+
+.input-bar .message-input::placeholder {
+  color: var(--text-muted);
+}
+
+.input-bar .message-input:focus {
+  background: var(--bg-input);
+}
+
+.send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.send-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.send-btn:active {
+  transform: scale(0.95);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   HEADER BAR — WhatsApp Top
+   ============================================ */
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-header);
+  border-left: 1px solid var(--border-color);
+}
+
+.chat-header-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.chat-header-info .name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.chat-header-info .status {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.chat-header-info .status.online {
+  color: var(--primary);
+}
+
+/* ============================================
+   SKELETON LOADING — Dark Theme
+   ============================================ */
+
+.skeleton-dark {
+  background: linear-gradient(90deg,
+      #1F2C34 0%,
+      #2A3942 50%,
+      #1F2C34 100%) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 1.5s infinite !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  opacity: 0.7;
+}
+
+.empty-state-icon {
+  font-size: 64px;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   LANDING PAGE HERO PHONE MOCKUP
+   ============================================ */
+
+.phone-mockup {
+  width: 280px;
+  height: 500px;
+  background: var(--bg-sidebar);
+  border-radius: 36px;
+  border: 3px solid #2A3942;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: heroFloat 6s ease-in-out infinite;
+}
+
+.phone-mockup-header {
+  background: var(--primary-deeper);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phone-mockup-header .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+}
+
+.phone-mockup-header .info h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  margin: 0;
+}
+
+.phone-mockup-header .info .status {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.phone-mockup-messages {
+  padding: 12px;
+  height: calc(100% - 100px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--bg-chat);
+}
+
+.mock-msg {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  max-width: 80%;
+  line-height: 1.4;
+  animation: bubbleIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+.mock-msg.sent {
+  background: var(--bg-message-sent);
+  color: var(--text-primary);
+  align-self: flex-end;
+  border-radius: 8px 8px 0 8px;
+}
+
+.mock-msg.received {
+  background: var(--bg-message-received);
+  color: var(--text-primary);
+  align-self: flex-start;
+  border-radius: 8px 8px 8px 0;
+}
+
+.mock-msg:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.mock-msg:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.mock-msg:nth-child(3) {
+  animation-delay: 1.0s;
+}
+
+.mock-msg:nth-child(4) {
+  animation-delay: 1.4s;
+}
+
+.mock-msg:nth-child(5) {
+  animation-delay: 1.8s;
+}
+
+.mock-msg:nth-child(6) {
+  animation-delay: 2.2s;
+}
+
+.phone-mockup-input {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-header);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phone-mockup-input .input-mock {
+  flex: 1;
+  background: var(--bg-input);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.phone-mockup-input .send-mock {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+}
+
+/* ============================================
+   FEATURE CARDS
+   ============================================ */
+
+.feature-card {
+  background: var(--bg-header);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all var(--transition-normal);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.1);
+}
+
+.feature-card .icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.feature-card h3 {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ============================================
+   TECH BADGE
+   ============================================ */
+
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.2);
+  border-radius: var(--radius-full);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+}
+
+.tech-badge:hover {
+  background: rgba(37, 211, 102, 0.15);
+  border-color: rgba(37, 211, 102, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   SCROLL TO BOTTOM FAB
+   ============================================ */
+
+.scroll-to-bottom {
+  position: absolute;
+  bottom: 80px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-header);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.scroll-to-bottom:hover {
+  color: var(--primary);
+  background: var(--bg-hover);
 }

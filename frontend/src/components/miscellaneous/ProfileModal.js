@@ -12,6 +12,7 @@ import {
   IconButton,
   Text,
   Image,
+  Box,
 } from "@chakra-ui/react";
 
 const ProfileModal = ({ user, children }) => {
@@ -22,41 +23,67 @@ const ProfileModal = ({ user, children }) => {
       {children ? (
         <span onClick={onOpen}>{children}</span>
       ) : (
-        <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
+        <IconButton
+          display={{ base: "flex" }}
+          icon={<ViewIcon />}
+          onClick={onOpen}
+          variant="ghost"
+          color="#8696A0"
+          _hover={{ bg: "rgba(37, 211, 102, 0.1)", color: "#25D366" }}
+          borderRadius="8px"
+        />
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent h="410px">
+        <ModalOverlay bg="rgba(0, 0, 0, 0.6)" backdropFilter="blur(8px)" />
+        <ModalContent bg="#1F2C34" border="1px solid #2A3942" borderRadius="12px" h="410px">
           <ModalHeader
-            fontSize="40px"
-            fontFamily="Work sans"
-            d="flex"
+            fontSize="28px"
+            fontWeight="600"
+            display="flex"
             justifyContent="center"
+            color="#E9EDEF"
           >
             {user.name}
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color="#667781" _hover={{ color: "#E9EDEF" }} />
           <ModalBody
-            d="flex"
+            display="flex"
             flexDir="column"
             alignItems="center"
             justifyContent="space-between"
           >
-            <Image
+            <Box
+              p="3px"
               borderRadius="full"
-              boxSize="150px"
-              src={user.pic}
-              alt={user.name}
-            />
-            <Text
-              fontSize={{ base: "28px", md: "30px" }}
-              fontFamily="Work sans"
+              bg="#25D366"
+              boxShadow="0 4px 20px rgba(37, 211, 102, 0.3)"
             >
-              Email: {user.email}
+              <Image
+                borderRadius="full"
+                boxSize="150px"
+                src={user.pic}
+                alt={user.name}
+                border="3px solid #1F2C34"
+              />
+            </Box>
+            <Text
+              fontSize={{ base: "18px", md: "20px" }}
+              color="#8696A0"
+              mt={4}
+            >
+              {user.email}
             </Text>
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+            <Button
+              onClick={onClose}
+              variant="ghost"
+              color="#8696A0"
+              _hover={{ bg: "rgba(37, 211, 102, 0.1)", color: "#E9EDEF" }}
+              borderRadius="8px"
+            >
+              Close
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

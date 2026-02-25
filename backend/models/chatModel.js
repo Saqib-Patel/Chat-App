@@ -10,9 +10,19 @@ const chatModel = mongoose.Schema(
       ref: "Message",
     },
     groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    groupAvatar: { type: String, default: "" },
+    unreadCount: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
   },
   { timestamps: true }
 );
+
+// Indexes for performance
+chatModel.index({ users: 1 });
+chatModel.index({ updatedAt: -1 });
 
 const Chat = mongoose.model("Chat", chatModel);
 

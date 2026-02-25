@@ -1,21 +1,20 @@
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, Text, Flex } from "@chakra-ui/layout";
 import "./styles.css";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { IconButton, Spinner, useToast, Avatar } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
-import Lottie from "react-lottie";
-import animationData from "../animations/typing.json";
 
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
-const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
+
+const ENDPOINT = process.env.REACT_APP_API_URL || "http://localhost:5000";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -27,14 +26,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
 
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
 
@@ -60,8 +51,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Messages",
+        title: "Error Occurred!",
+        description: "Failed to load the messages",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -85,7 +76,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           "/api/message",
           {
             content: newMessage,
-            chatId: selectedChat,
+            chatId: selectedChat._id,
           },
           config
         );
@@ -93,8 +84,42 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setMessages([...messages, data]);
       } catch (error) {
         toast({
-          title: "Error Occured!",
-          description: "Failed to send the Message",
+          title: "Error Occurred!",
+          description: "Failed to send the message",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+    }
+  };
+
+  const handleSendClick = async () => {
+    if (newMessage) {
+      socket.emit("stop typing", selectedChat._id);
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        setNewMessage("");
+        const { data } = await axios.post(
+          "/api/message",
+          {
+            content: newMessage,
+            chatId: selectedChat._id,
+          },
+          config
+        );
+        socket.emit("new message", data);
+        setMessages([...messages, data]);
+      } catch (error) {
+        toast({
+          title: "Error Occurred!",
+          description: "Failed to send the message",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -122,17 +147,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat]);
 
   useEffect(() => {
-    socket.on("message recieved", (newMessageRecieved) => {
+    socket.on("message received", (newMessageReceived) => {
       if (
-        !selectedChatCompare || // if chat is not selected or doesn't match current chat
-        selectedChatCompare._id !== newMessageRecieved.chat._id
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
-        if (!notification.includes(newMessageRecieved)) {
-          setNotification([newMessageRecieved, ...notification]);
+        if (!notification.includes(newMessageReceived)) {
+          setNotification([newMessageReceived, ...notification]);
           setFetchAgain(!fetchAgain);
         }
       } else {
-        setMessages([...messages, newMessageRecieved]);
+        setMessages([...messages, newMessageReceived]);
       }
     });
   });
@@ -161,51 +186,87 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   return (
     <>
       {selectedChat ? (
-        <>
-          <Text
-            fontSize={{ base: "28px", md: "30px" }}
-            pb={3}
-            px={2}
-            w="100%"
-            fontFamily="Work sans"
-            d="flex"
-            justifyContent={{ base: "space-between" }}
+        <Box display="flex" flexDir="column" w="100%" h="100%">
+          {/* Chat Header — WhatsApp Style */}
+          <Flex
             alignItems="center"
+            bg="#1F2C34"
+            px={4}
+            py={2}
+            borderBottom="1px solid #2A3942"
+            borderLeft="1px solid #2A3942"
           >
             <IconButton
-              d={{ base: "flex", md: "none" }}
+              display={{ base: "flex", md: "none" }}
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
+              variant="ghost"
+              color="#25D366"
+              _hover={{ bg: "rgba(37, 211, 102, 0.1)" }}
+              borderRadius="8px"
+              mr={2}
             />
-            {messages &&
-              (!selectedChat.isGroupChat ? (
-                <>
-                  {getSender(user, selectedChat.users)}
-                  <ProfileModal
-                    user={getSenderFull(user, selectedChat.users)}
-                  />
-                </>
+
+            {/* Avatar */}
+            <Avatar
+              size="sm"
+              name={
+                !selectedChat.isGroupChat
+                  ? getSender(user, selectedChat.users)
+                  : selectedChat.chatName
+              }
+              src={
+                !selectedChat.isGroupChat
+                  ? getSenderFull(user, selectedChat.users)?.pic
+                  : undefined
+              }
+              bg="#25D366"
+              color="white"
+            />
+
+            {/* Name & Status */}
+            <Box flex={1} ml={3}>
+              <Text fontSize="md" fontWeight="500" color="#E9EDEF">
+                {!selectedChat.isGroupChat
+                  ? getSender(user, selectedChat.users)
+                  : selectedChat.chatName.toUpperCase()}
+              </Text>
+              <Text fontSize="xs" color="#8696A0">
+                {istyping ? (
+                  <Text as="span" color="#25D366">typing...</Text>
+                ) : (
+                  selectedChat.isGroupChat
+                    ? `${selectedChat.users.length} members`
+                    : "tap here for contact info"
+                )}
+              </Text>
+            </Box>
+
+            {/* Action Icons */}
+            <Flex gap={1}>
+              {!selectedChat.isGroupChat ? (
+                <ProfileModal
+                  user={getSenderFull(user, selectedChat.users)}
+                />
               ) : (
-                <>
-                  {selectedChat.chatName.toUpperCase()}
-                  <UpdateGroupChatModal
-                    fetchMessages={fetchMessages}
-                    fetchAgain={fetchAgain}
-                    setFetchAgain={setFetchAgain}
-                  />
-                </>
-              ))}
-          </Text>
+                <UpdateGroupChatModal
+                  fetchMessages={fetchMessages}
+                  fetchAgain={fetchAgain}
+                  setFetchAgain={setFetchAgain}
+                />
+              )}
+            </Flex>
+          </Flex>
+
+          {/* Messages Area — WhatsApp doodle background */}
           <Box
-            d="flex"
+            display="flex"
             flexDir="column"
             justifyContent="flex-end"
-            p={3}
-            bg="#E8E8E8"
+            flex={1}
             w="100%"
-            h="100%"
-            borderRadius="lg"
             overflowY="hidden"
+            className="whatsapp-doodle-bg"
           >
             {loading ? (
               <Spinner
@@ -214,6 +275,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 h={20}
                 alignSelf="center"
                 margin="auto"
+                color="#25D366"
+                thickness="3px"
               />
             ) : (
               <div className="messages">
@@ -221,40 +284,157 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </div>
             )}
 
+            {/* Typing Indicator */}
+            {istyping && (
+              <Box px={4} pb={1}>
+                <div className="typing-indicator">
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                </div>
+              </Box>
+            )}
+          </Box>
+
+          {/* Input Bar — WhatsApp Style */}
+          <Box
+            display="flex"
+            alignItems="center"
+            gap={2}
+            px={3}
+            py={2}
+            bg="#1F2C34"
+            borderTop="1px solid #2A3942"
+            borderLeft="1px solid #2A3942"
+          >
+            {/* Emoji button */}
+            <IconButton
+              icon={<Text fontSize="xl">😊</Text>}
+              variant="ghost"
+              borderRadius="50%"
+              size="sm"
+              color="#8696A0"
+              _hover={{ bg: "rgba(255,255,255,0.05)" }}
+              aria-label="Emoji"
+            />
+
+            {/* Attachment button */}
+            <IconButton
+              icon={<Text fontSize="lg">📎</Text>}
+              variant="ghost"
+              borderRadius="50%"
+              size="sm"
+              color="#8696A0"
+              _hover={{ bg: "rgba(255,255,255,0.05)" }}
+              aria-label="Attach"
+            />
+
+            {/* Input */}
             <FormControl
               onKeyDown={sendMessage}
-              id="first-name"
+              id="message-input"
               isRequired
-              mt={3}
+              flex={1}
             >
-              {istyping ? (
-                <div>
-                  <Lottie
-                    options={defaultOptions}
-                    // height={50}
-                    width={70}
-                    style={{ marginBottom: 15, marginLeft: 0 }}
-                  />
-                </div>
-              ) : (
-                <></>
-              )}
               <Input
                 variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter a message.."
+                bg="#2A3942"
+                placeholder="Type a message"
                 value={newMessage}
                 onChange={typingHandler}
+                borderRadius="8px"
+                border="none"
+                _hover={{ bg: "#323F49" }}
+                _focus={{
+                  bg: "#2A3942",
+                  borderColor: "transparent",
+                  boxShadow: "none",
+                }}
+                color="#E9EDEF"
+                _placeholder={{ color: "#667781" }}
+                h="42px"
               />
             </FormControl>
+
+            {/* Send / Mic button */}
+            {newMessage ? (
+              <IconButton
+                icon={
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                  </svg>
+                }
+                onClick={handleSendClick}
+                bg="#25D366"
+                borderRadius="50%"
+                size="md"
+                _hover={{ bg: "#128C7E" }}
+                _active={{ bg: "#075E54" }}
+                aria-label="Send"
+              />
+            ) : (
+              <IconButton
+                icon={<Text fontSize="xl">🎤</Text>}
+                variant="ghost"
+                borderRadius="50%"
+                size="md"
+                color="#8696A0"
+                _hover={{ bg: "rgba(255,255,255,0.05)" }}
+                aria-label="Voice"
+              />
+            )}
           </Box>
-        </>
+        </Box>
       ) : (
-        // to get socket.io on same page
-        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
-          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-            Click on a user to start chatting
+        // Empty State — WhatsApp no-chat-selected
+        <Box
+          display="flex"
+          flexDir="column"
+          alignItems="center"
+          justifyContent="center"
+          h="100%"
+          gap={4}
+          bg="#222E35"
+          borderLeft="1px solid #2A3942"
+          w="100%"
+        >
+          <Box
+            w="200px"
+            h="200px"
+            borderRadius="50%"
+            bg="rgba(37, 211, 102, 0.06)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            animation="float 4s ease-in-out infinite"
+          >
+            <Text fontSize="80px" opacity={0.7}>💬</Text>
+          </Box>
+          <Text
+            fontSize="2xl"
+            fontWeight="300"
+            color="#E9EDEF"
+            mt={4}
+          >
+            ChatFlow Web
           </Text>
+          <Text fontSize="sm" color="#8696A0" textAlign="center" maxW="400px" lineHeight="1.6">
+            Send and receive messages in real-time.
+            <br />
+            Select a chat from the sidebar to start messaging.
+          </Text>
+          <Box
+            mt={4}
+            px={6}
+            py={2}
+            borderRadius="full"
+            bg="rgba(37, 211, 102, 0.08)"
+            border="1px solid rgba(37, 211, 102, 0.15)"
+          >
+            <Text fontSize="xs" color="#25D366">
+              🔒 End-to-end encrypted messaging
+            </Text>
+          </Box>
         </Box>
       )}
     </>
