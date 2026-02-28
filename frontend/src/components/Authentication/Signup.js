@@ -6,20 +6,17 @@ import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router";
-import { ChatState } from "../../Context/ChatProvider";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const history = useHistory();
-  const { setUser } = ChatState();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [password, setPassword] = useState("");
-  const [pic, setPic] = useState();
   const [loading, setLoading] = useState(false);
 
   const submitHandler = async () => {
@@ -28,7 +25,7 @@ const Signup = () => {
       toast({
         title: "Please fill all the fields",
         status: "warning",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
         position: "bottom",
       });
@@ -39,7 +36,7 @@ const Signup = () => {
       toast({
         title: "Passwords do not match",
         status: "warning",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
         position: "bottom",
       });
@@ -54,17 +51,16 @@ const Signup = () => {
       };
       const { data } = await axios.post(
         "/api/user",
-        { name, email, password, pic },
+        { name, email, password },
         config
       );
       toast({
-        title: "Registration Successful!",
+        title: "Registration Successful",
         status: "success",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
         position: "bottom",
       });
-      setUser(data);
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       history.push("/chats");
@@ -73,41 +69,11 @@ const Signup = () => {
         title: "Error Occurred!",
         description: error.response?.data?.message || "Something went wrong",
         status: "error",
-        duration: 4000,
+        duration: 5000,
         isClosable: true,
         position: "bottom",
       });
       setLoading(false);
-    }
-  };
-
-  const postDetails = (pics) => {
-    if (pics === undefined) {
-      return;
-    }
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      // Convert to base64 data URL as fallback (no external service needed)
-      const reader = new FileReader();
-      reader.readAsDataURL(pics);
-      reader.onloadend = () => {
-        // Use a placeholder or just skip - the default avatar will be used
-        toast({
-          title: "Profile picture noted",
-          description: "Default avatar will be used. You can update your picture later.",
-          status: "info",
-          duration: 3000,
-          isClosable: true,
-          position: "bottom",
-        });
-      };
-    } else {
-      toast({
-        title: "Please select a JPEG or PNG image",
-        status: "warning",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom",
-      });
     }
   };
 
@@ -147,7 +113,7 @@ const Signup = () => {
         <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
-            placeholder="Enter password (min 6 characters)"
+            placeholder="Enter password"
             onChange={(e) => setPassword(e.target.value)}
             bg="#2A3942"
             borderColor="transparent"
@@ -199,33 +165,6 @@ const Signup = () => {
             </Button>
           </InputRightElement>
         </InputGroup>
-      </FormControl>
-      <FormControl id="signup-pic">
-        <FormLabel color="#8696A0">Upload your picture (optional)</FormLabel>
-        <Input
-          type="file"
-          p={1.5}
-          accept="image/*"
-          onChange={(e) => postDetails(e.target.files[0])}
-          bg="#2A3942"
-          borderColor="transparent"
-          borderRadius="8px"
-          color="#E9EDEF"
-          sx={{
-            "::file-selector-button": {
-              bg: "rgba(37, 211, 102, 0.15)",
-              color: "#25D366",
-              border: "1px solid rgba(37, 211, 102, 0.3)",
-              borderRadius: "6px",
-              px: 4,
-              py: 1,
-              mr: 3,
-              cursor: "pointer",
-              fontWeight: "500",
-              fontSize: "sm",
-            },
-          }}
-        />
       </FormControl>
       <Button
         width="100%"

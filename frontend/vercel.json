@@ -1,4 +1,13 @@
 {
+    "buildCommand": "npm run build",
+    "outputDirectory": "build",
+    "framework": "create-react-app",
+    "build": {
+        "env": {
+            "NODE_OPTIONS": "--openssl-legacy-provider",
+            "CI": "false"
+        }
+    },
     "rewrites": [
         {
             "source": "/api/:path*",

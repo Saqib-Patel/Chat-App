@@ -63,7 +63,6 @@ const ScrollableChat = ({ messages }) => {
               }}
             >
               {m.content}
-              {/* Timestamp inside bubble */}
               <span
                 style={{
                   display: "inline-flex",
@@ -78,7 +77,6 @@ const ScrollableChat = ({ messages }) => {
                 }}
               >
                 {formatMsgTime(m.createdAt)}
-                {/* Tick icons for sent messages */}
                 {m.sender._id === user._id && (
                   <span style={{ color: "#53BDEB", fontSize: "13px", marginLeft: "2px" }}>
                     ✓✓

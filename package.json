@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
-    "build": "npm install && cd frontend && npm install --legacy-peer-deps && npm run build"
+    "build": "npm install && cd frontend && npm install --legacy-peer-deps && CI=false NODE_OPTIONS=--openssl-legacy-provider npm run build"
   },
   "keywords": [
     "mern",

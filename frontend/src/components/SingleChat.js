@@ -9,7 +9,6 @@ import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
-
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
@@ -135,13 +134,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
-
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     fetchMessages();
-
     selectedChatCompare = selectedChat;
     // eslint-disable-next-line
   }, [selectedChat]);
@@ -187,7 +184,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     <>
       {selectedChat ? (
         <Box display="flex" flexDir="column" w="100%" h="100%">
-          {/* Chat Header — WhatsApp Style */}
           <Flex
             alignItems="center"
             bg="#1F2C34"
@@ -207,7 +203,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               mr={2}
             />
 
-            {/* Avatar */}
             <Avatar
               size="sm"
               name={
@@ -224,7 +219,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               color="white"
             />
 
-            {/* Name & Status */}
             <Box flex={1} ml={3}>
               <Text fontSize="md" fontWeight="500" color="#E9EDEF">
                 {!selectedChat.isGroupChat
@@ -242,7 +236,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </Text>
             </Box>
 
-            {/* Action Icons */}
             <Flex gap={1}>
               {!selectedChat.isGroupChat ? (
                 <ProfileModal
@@ -258,7 +251,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             </Flex>
           </Flex>
 
-          {/* Messages Area — WhatsApp doodle background */}
           <Box
             display="flex"
             flexDir="column"
@@ -284,7 +276,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </div>
             )}
 
-            {/* Typing Indicator */}
             {istyping && (
               <Box px={4} pb={1}>
                 <div className="typing-indicator">
@@ -296,7 +287,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
           </Box>
 
-          {/* Input Bar — WhatsApp Style */}
           <Box
             display="flex"
             alignItems="center"
@@ -307,7 +297,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             borderTop="1px solid #2A3942"
             borderLeft="1px solid #2A3942"
           >
-            {/* Emoji button */}
             <IconButton
               icon={<Text fontSize="xl">😊</Text>}
               variant="ghost"
@@ -318,7 +307,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               aria-label="Emoji"
             />
 
-            {/* Attachment button */}
             <IconButton
               icon={<Text fontSize="lg">📎</Text>}
               variant="ghost"
@@ -329,7 +317,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               aria-label="Attach"
             />
 
-            {/* Input */}
             <FormControl
               onKeyDown={sendMessage}
               id="message-input"
@@ -356,7 +343,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               />
             </FormControl>
 
-            {/* Send / Mic button */}
             {newMessage ? (
               <IconButton
                 icon={
@@ -386,7 +372,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </Box>
         </Box>
       ) : (
-        // Empty State — WhatsApp no-chat-selected
         <Box
           display="flex"
           flexDir="column"

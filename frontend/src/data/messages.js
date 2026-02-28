@@ -5,7 +5,7 @@ export const messages = [
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "1",
-      name: "Piyush",
+      name: "Saqib",
     },
     content: "Hello There",
     chat: "60a3de1ff381d830b884998d",
@@ -29,7 +29,7 @@ export const messages = [
   },
   {
     readBy: [],
-    _id: "60a3f47ece619262c884b77d",
+    _id: "60a3f47ece619262c884b78e",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "2",
@@ -43,25 +43,25 @@ export const messages = [
   },
   {
     readBy: [],
-    _id: "60a3f2ed0c8dcc43bc3cfff2",
+    _id: "60a3f2ed0c8dcc43bc3cff01",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "1",
-      name: "Piyush",
+      name: "Saqib",
     },
     content: "All good!",
     chat: "60a3de1ff381d830b884998d",
-    createdAt: "2021-05-18T17:011:33.332Z",
-    updatedAt: "2021-05-18T17:011:33.332Z",
+    createdAt: "2021-05-18T17:11:33.332Z",
+    updatedAt: "2021-05-18T17:11:33.332Z",
     __v: 0,
   },
   {
     readBy: [],
-    _id: "60a3f2ed0c8dcc43bc3cfff2",
+    _id: "60a3f2ed0c8dcc43bc3cff02",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "1",
-      name: "Piyush",
+      name: "Saqib",
     },
     content: "What About You?",
     chat: "60a3de1ff381d830b884998d",
@@ -71,7 +71,7 @@ export const messages = [
   },
   {
     readBy: [],
-    _id: "60a3f47ece619262c884b77d",
+    _id: "60a3f47ece619262c884b79f",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "2",
@@ -85,13 +85,13 @@ export const messages = [
   },
   {
     readBy: [],
-    _id: "60a3f47ece619262c884b77d",
+    _id: "60a3f47ece619262c884b7a0",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "2",
       name: "John Doe",
     },
-    content: "What Techonologies are you learning these days?",
+    content: "What technologies are you learning these days?",
     chat: "60a3de1ff381d830b884998d",
     createdAt: "2021-05-18T17:09:16.447Z",
     updatedAt: "2021-05-18T17:09:16.447Z",
@@ -99,11 +99,11 @@ export const messages = [
   },
   {
     readBy: [],
-    _id: "60a3f2ed0c8dcc43bc3cfff2",
+    _id: "60a3f2ed0c8dcc43bc3cff03",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "1",
-      name: "Piyush",
+      name: "Saqib",
     },
     content: "Just the MERN Stack",
     chat: "60a3de1ff381d830b884998d",
@@ -113,13 +113,13 @@ export const messages = [
   },
   {
     readBy: [],
-    _id: "60a3f47ece619262c884b77d",
+    _id: "60a3f47ece619262c884b7a1",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "2",
       name: "John Doe",
     },
-    content: "From Roadside Coder?",
+    content: "Nice, building anything cool?",
     chat: "60a3de1ff381d830b884998d",
     createdAt: "2021-05-18T17:19:16.447Z",
     updatedAt: "2021-05-18T17:19:16.447Z",
@@ -127,13 +127,13 @@ export const messages = [
   },
   {
     readBy: [],
-    _id: "60a3f2ed0c8dcc43bc3cfff2",
+    _id: "60a3f2ed0c8dcc43bc3cff04",
     sender: {
       pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
       _id: "60a281bc502ec30428fb6bb0",
-      name: "Piyush",
+      name: "Saqib",
     },
-    content: "Yea boiii..",
+    content: "Yea, this chat app actually!",
     chat: "60a3de1ff381d830b884998d",
     createdAt: "2021-05-18T17:20:18.332Z",
     updatedAt: "2021-05-18T17:20:18.332Z",

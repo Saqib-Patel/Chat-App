@@ -3,9 +3,6 @@ const Message = require("../models/messageModel");
 const User = require("../models/userModel");
 const Chat = require("../models/chatModel");
 
-//@description     Get all Messages for a chat
-//@route           GET /api/message/:chatId
-//@access          Protected
 const allMessages = asyncHandler(async (req, res) => {
   try {
     const messages = await Message.find({ chat: req.params.chatId })
@@ -18,14 +15,10 @@ const allMessages = asyncHandler(async (req, res) => {
   }
 });
 
-//@description     Send a new message
-//@route           POST /api/message/
-//@access          Protected
 const sendMessage = asyncHandler(async (req, res) => {
   const { content, chatId } = req.body;
 
   if (!content || !chatId) {
-    console.log("Invalid data passed into request");
     return res.sendStatus(400);
   }
 
@@ -38,7 +31,6 @@ const sendMessage = asyncHandler(async (req, res) => {
   try {
     var message = await Message.create(newMessage);
 
-    // Use .populate() directly (execPopulate is deprecated in Mongoose 6+)
     message = await Message.findById(message._id)
       .populate("sender", "name pic")
       .populate({

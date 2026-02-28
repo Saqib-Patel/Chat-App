@@ -63,7 +63,6 @@ const MyChats = ({ fetchAgain }) => {
       borderRight="1px solid #2A3942"
       h="100%"
     >
-      {/* Sidebar Header */}
       <Box
         px={4}
         py={3}
@@ -73,11 +72,7 @@ const MyChats = ({ fetchAgain }) => {
         alignItems="center"
         borderBottom="1px solid #2A3942"
       >
-        <Text
-          fontSize="lg"
-          fontWeight="600"
-          color="#E9EDEF"
-        >
+        <Text fontSize="lg" fontWeight="600" color="#E9EDEF">
           Chats
         </Text>
         <GroupChatModal>
@@ -87,9 +82,7 @@ const MyChats = ({ fetchAgain }) => {
             rightIcon={<AddIcon fontSize="10px" />}
             variant="ghost"
             color="#25D366"
-            _hover={{
-              bg: "rgba(37, 211, 102, 0.1)",
-            }}
+            _hover={{ bg: "rgba(37, 211, 102, 0.1)" }}
             borderRadius="8px"
             size="sm"
           >
@@ -98,7 +91,6 @@ const MyChats = ({ fetchAgain }) => {
         </GroupChatModal>
       </Box>
 
-      {/* Chat List */}
       <Box
         display="flex"
         flexDir="column"
@@ -112,27 +104,19 @@ const MyChats = ({ fetchAgain }) => {
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={
-                  selectedChat === chat
-                    ? "#2A3942"
-                    : "transparent"
-                }
+                bg={selectedChat === chat ? "#2A3942" : "transparent"}
                 px={3}
                 py={3}
                 key={chat._id}
                 borderBottom="1px solid rgba(42, 57, 66, 0.5)"
                 transition="background 0.15s ease"
                 _hover={{
-                  bg:
-                    selectedChat === chat
-                      ? "#2A3942"
-                      : "#202C33",
+                  bg: selectedChat === chat ? "#2A3942" : "#202C33",
                 }}
                 display="flex"
                 alignItems="center"
                 gap={3}
               >
-                {/* Avatar */}
                 <Box position="relative">
                   <Avatar
                     size="md"
@@ -145,7 +129,6 @@ const MyChats = ({ fetchAgain }) => {
                   />
                 </Box>
 
-                {/* Chat Info */}
                 <Box flex={1} overflow="hidden">
                   <Flex justifyContent="space-between" alignItems="center" mb="2px">
                     <Text

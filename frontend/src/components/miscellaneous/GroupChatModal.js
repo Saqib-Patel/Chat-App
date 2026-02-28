@@ -122,7 +122,6 @@ const GroupChatModal = ({ children }) => {
       );
       setChats([data, ...chats]);
       onClose();
-      // Reset state
       setGroupChatName("");
       setSelectedUsers([]);
       setSearch("");
@@ -201,7 +200,6 @@ const GroupChatModal = ({ children }) => {
               />
             </FormControl>
 
-            {/* Selected users badges */}
             <Box w="100%" display="flex" flexWrap="wrap">
               {selectedUsers.map((u) => (
                 <UserBadgeItem
@@ -212,7 +210,6 @@ const GroupChatModal = ({ children }) => {
               ))}
             </Box>
 
-            {/* Search results or status messages */}
             {loading ? (
               <Text color="#8696A0" py={3} fontSize="sm">Searching...</Text>
             ) : searched && searchResult.length === 0 ? (
@@ -232,7 +229,6 @@ const GroupChatModal = ({ children }) => {
                 ))
             )}
 
-            {/* Helper text */}
             {selectedUsers.length > 0 && selectedUsers.length < 2 && (
               <Text color="#FFC107" fontSize="xs" mt={2}>
                 Select at least {2 - selectedUsers.length} more member{selectedUsers.length === 1 ? "" : "s"}

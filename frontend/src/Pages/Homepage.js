@@ -27,7 +27,6 @@ function Homepage() {
     if (user) history.push("/chats");
   }, [history]);
 
-  // Features data
   const features = [
     { icon: "⚡", title: "Real-Time Messaging", desc: "Instant delivery with Socket.io — messages arrive in milliseconds" },
     { icon: "👥", title: "Group Chats", desc: "Create groups, add members, and chat together seamlessly" },
@@ -51,7 +50,6 @@ function Homepage() {
         p={4}
       >
         <Container maxW="md" centerContent>
-          {/* Logo */}
           <Box
             display="flex"
             justifyContent="center"
@@ -87,7 +85,6 @@ function Homepage() {
             </Flex>
           </Box>
 
-          {/* Auth Tabs */}
           <Box
             bg="#111B21"
             w="100%"
@@ -129,7 +126,6 @@ function Homepage() {
 
   return (
     <Box w="100%" minH="100vh" bg="#0B141A" overflowY="auto" overflowX="hidden">
-      {/* ==================== NAVBAR ==================== */}
       <Box
         as="nav"
         position="sticky"
@@ -190,14 +186,12 @@ function Homepage() {
         </Flex>
       </Box>
 
-      {/* ==================== HERO SECTION ==================== */}
       <Box maxW="1200px" mx="auto" px={{ base: 4, md: 8 }} py={{ base: 12, md: 20 }}>
         <Flex
           direction={{ base: "column", lg: "row" }}
           alignItems="center"
           gap={{ base: 10, lg: 16 }}
         >
-          {/* Left Content */}
           <Box flex={1} textAlign={{ base: "center", lg: "left" }}>
             <Text
               fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
@@ -270,7 +264,6 @@ function Homepage() {
             </Flex>
           </Box>
 
-          {/* Right — Phone Mockup */}
           <Box flex={1} display="flex" justifyContent="center">
             <Box className="phone-mockup">
               <Box className="phone-mockup-header">
@@ -297,7 +290,6 @@ function Homepage() {
         </Flex>
       </Box>
 
-      {/* ==================== FEATURES SECTION ==================== */}
       <Box bg="#111B21" py={{ base: 12, md: 20 }} borderTop="1px solid #2A3942">
         <Box maxW="1200px" mx="auto" px={{ base: 4, md: 8 }}>
           <Text
@@ -334,7 +326,6 @@ function Homepage() {
         </Box>
       </Box>
 
-      {/* ==================== TECH STACK ==================== */}
       <Box py={{ base: 10, md: 16 }} bg="#0B141A">
         <Box maxW="1200px" mx="auto" px={{ base: 4, md: 8 }} textAlign="center">
           <Text
@@ -355,7 +346,6 @@ function Homepage() {
         </Box>
       </Box>
 
-      {/* ==================== FOOTER ==================== */}
       <Box
         borderTop="1px solid #2A3942"
         py={8}

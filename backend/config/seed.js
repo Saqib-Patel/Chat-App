@@ -1,10 +1,5 @@
 const User = require("../models/userModel");
 
-/**
- * Seeds the database with a guest user account for demo/testing purposes.
- * This ensures the "Use Guest Credentials" button on the login page works.
- * Runs on every server start — only creates the user if it doesn't already exist.
- */
 const seedGuestUser = async () => {
     try {
         const guestEmail = "guest@example.com";
